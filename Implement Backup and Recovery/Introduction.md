@@ -5,6 +5,7 @@ As cloud computing continues to grow in popularity, organizations have started t
 In the Azure cloud, there are several ways to implement backup and recovery, depending on the type of data or service being backed up. In this article, we will discuss the various options available and how to implement them.
 
 ## Azure Backup
+
 Azure Backup is a service that provides data protection solutions for Azure services and on-premises servers. Azure Backup allows you to back up and restore your data to and from the cloud.
 
 To implement Azure Backup, follow these steps:
@@ -34,6 +35,7 @@ b. Click on 'Add Backup' to add a new backup item.
 c. Choose the type of service or server you want to back up, and follow the prompts to complete the configuration.
 
 ## Azure Site Recovery
+
 Azure Site Recovery is a service that provides disaster recovery solutions for Azure services and on-premises servers. Azure Site Recovery allows you to replicate your data to a secondary location and failover to that location in the event of a disaster.
 
 To implement Azure Site Recovery, follow these steps:
@@ -50,7 +52,7 @@ a. In the Recovery Services Vault, select 'Site Recovery'.
 b. Click on 'Create a Site Recovery Vault'.
 c. Fill in the required details such as the subscription, resource group, and name of the Site Recovery Vault.
 
-+ tep 3: Configure Replication
++ Step 3: Configure Replication
 
 After creating a Recovery Services Vault and a Site Recovery Vault, you can now configure replication for your services and servers. To configure replication, follow these steps:
 
@@ -59,6 +61,7 @@ b. Click on 'Step 1: Replicate Application'.
 c. Choose the type of service or server you want to replicate, and follow the prompts to complete the configuration.
 
 ### Azure SQL Database Backup
+
 Azure SQL Database is a fully managed cloud database service that provides high availability, scalability, and security. Azure SQL Database Backup allows you to back up your database to the cloud.
 
 To implement Azure SQL Database Backup, follow these steps:
