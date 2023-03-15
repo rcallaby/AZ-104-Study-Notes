@@ -209,11 +209,64 @@ az network vnet subnet update --name mySubnet --resource-group myResourceGroup -
 
 
 ### Azure Active Directory
-TODO: Add examples of managing through Powershell and CLI
+Create a new user in Azure Active Directory through PowerShell:
+```
+New-AzureADUser -AccountEnabled $true -DisplayName "John Smith" -GivenName "John" -Surname "Smith" -UserPrincipalName "john.smith@contoso.com" -PasswordProfile (New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile -Property @{Password="P@ssw0rd1";ForceChangePasswordNextLogin=$false})
+```
+List all users in Azure Active Directory through PowerShell:
+```
+Get-AzureADUser
+```
+Create a new group in Azure Active Directory through CLI:
+```
+az ad group create --display-name "Engineering Team" --mail-nickname "engteam" --description "This group contains all members of the Engineering team."
+```
+Add a user to an Azure Active Directory group through CLI:
+```
+az ad group member add --group "Engineering Team" --member-id "john.smith@contoso.com"
+```
+
+
 
 ### Azure Security Center
-TODO: Add examples of managing through Powershell and CLI
-
+Enable Azure Security Center on a subscription:
+```
+Connect-AzAccount
+Set-AzSubscription -SubscriptionId <subscriptionId>
+Set-AzSecurityCenterSubscription -SubscriptionId <subscriptionId> -Tier Standard
+```
+Get Azure Security Center Recommendations:
+```
+Connect-AzAccount
+$recommendations = Get-AzSecurityRecommendation -ResourceId <resourceId>
+foreach ($rec in $recommendations) {
+    Write-Host $rec.recommendation.displayname
+    Write-Host $rec.recommendation.description
+}
+```
+Get Azure Security Center Alerts:
+```
+Connect-AzAccount
+$alerts = Get-AzSecurityAlert -ResourceId <resourceId>
+foreach ($alert in $alerts) {
+    Write-Host $alert.Title
+    Write-Host $alert.Description
+}
+```
+CLI Examples:
+Enable Azure Security Center on a subscription:
+```
+az account set --subscription <subscriptionId>
+az security pricing create --name default --tier 'Standard'
+```
+Get Azure Security Center Recommendations:
+```
+az security recommendation list --resource <resourceId>
+```
+Get Azure Security Center Alerts:
+```
+az security alert list --resource <resourceId>
+```
 ### Azure Monitor
 TODO: Add examples of managing through Powershell and CLI
 
