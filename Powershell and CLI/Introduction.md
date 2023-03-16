@@ -268,10 +268,117 @@ Get Azure Security Center Alerts:
 az security alert list --resource <resourceId>
 ```
 ### Azure Monitor
-TODO: Add examples of managing through Powershell and CLI
+Create an alert rule for high CPU usage on a virtual machine:
+```
+# Connect to your Azure subscription
+Connect-AzAccount
+
+# Get the virtual machine you want to monitor
+$vm = Get-AzVM -ResourceGroupName "myResourceGroup" -Name "myVM"
+
+# Create the alert criteria
+$monitorCriteria = New-AzMetricAlertRuleV2Criteria -MetricName "Percentage CPU" `
+                                                   -Operator GreaterThan `
+                                                   -Threshold 80 `
+                                                   -TimeAggregationOperator Average `
+                                                   -Dimensions $vm.Id
+
+# Create the alert rule
+Add-AzMetricAlertRuleV2 -Name "High CPU Alert" `
+                       -ResourceGroup "myResourceGroup" `
+                       -TargetResourceId $vm.Id `
+                       -Description "Alert when CPU usage is over 80%" `
+                       -Criteria $monitorCriteria `
+                       -WindowSize 5 `
+                       -Severity 2 `
+                       -Enabled $true
+
+```
+Create a log query alert for failed sign-ins in Azure Active Directory:
+
+```
+# Connect to your Azure subscription
+Connect-AzAccount
+
+# Create the log query
+$logQuery = "AzureActivity | where OperationNameValue == 'Sign-in failed' | where ActivityStatus == 'Failed'"
+
+# Create the alert rule
+Add-AzScheduledQueryRule -Name "Failed Sign-in Alert" `
+                        -ResourceGroupName "myResourceGroup" `
+                        -TargetResource "/subscriptions/{subscriptionId}/providers/Microsoft.OperationalInsights/workspaces/{workspaceId}" `
+                        -Location "East US" `
+                        -Schedule "0 */5 * * * *" `
+                        -Severity 2 `
+                        -Enabled $true `
+                        -DataSources @(
+                            @{
+                                'Query' = $logQuery
+                                'DataSourceUri' = "https://api.loganalytics.io"
+                            }
+                        )
+
+```
+Create an alert rule for high CPU usage on a virtual machine:
+
+```
+# Get the virtual machine you want to monitor
+vmId=$(az vm show -g myResourceGroup -n myVM --query id -o tsv)
+
+# Create the alert criteria
+monitorCriteria=$(az monitor metrics alert create --name "High CPU Alert" `
+                                                 --resource-group "myResourceGroup" `
+                                                 --target $vmId `
+                                                 --condition "Percentage CPU > 80" `
+                                                 --aggregation "Average" `
+                                                 --window-size 5m `
+                                                 --severity 2 `
+                                                 --description "Alert when CPU usage is over 80%" `
+                                                 --query "criteria" `
+                                                 -o json)
+
+# Create the alert rule
+az monitor metrics alert create --name "High CPU Alert" `
+                                --resource-group "myResourceGroup" `
+                                --target $vmId `
+                                --criteria $monitorCriteria `
+                                --query "{id:id}" `
+                                -o tsv
+
+```
+Create a log query alert for failed sign-ins in Azure Active Directory:
+```
+# Create the log query
+logQuery="AzureActivity | where OperationNameValue == 'Sign-in failed' | where ActivityStatus == 'Failed'"
+
+# Create the alert rule
+az monitor log-analytics scheduled-query create --name "Failed Sign-in Alert" `
+                                                --resource-group "myResourceGroup" `
+                                                --workspace "/subscriptions/{subscriptionId}/resourceGroups/myResourceGroup/providers/Microsoft.OperationalInsights/workspaces/myWorkspace" `
+                                                --schedule "0 */5 * * * *" `
+                                                --query $logQuery `
+                                                --severity 2 `
+                                                --description "Alert when sign
+
+```
+
+
+
 
 ### Azure Automation
-TODO: Add examples of managing through Powershell and CLI
+There are many ways to do this but below are some of the examples of what you can do, and many of the examples mentioned below are also mentioed above with various code examples:
+
+Starting and stopping virtual machines on a schedule: You can use Azure Automation to start and stop virtual machines on a schedule, such as starting them in the morning and stopping them at night to save costs. This can be done using Azure PowerShell or the CLI.
+
+Creating and managing Azure resources: You can use Azure Automation to create and manage Azure resources, such as virtual machines, storage accounts, and SQL databases. This can be done using Azure PowerShell or the CLI.
+
+Deploying applications to Azure: You can use Azure Automation to deploy applications to Azure, such as deploying a web application to Azure App Service. This can be done using Azure PowerShell or the CLI.
+
+Managing Azure DevOps: You can use Azure Automation to manage Azure DevOps, such as creating and managing projects, repositories, and pipelines. This can be done using Azure PowerShell or the CLI.
+
+Automating backups: You can use Azure Automation to automate backups of Azure resources, such as virtual machines and storage accounts. This can be done using Azure PowerShell or the CLI.
+
+I am sure if you search GitHub you will find example code for these types of operations. It shouldn't be difficult to find something that you can customize to your needs.
 
 You will need to know how to use PowerShell and CLI to manage all of these Azure resources. You will need to know how to create and manage virtual machines, storage accounts, virtual networks, and Azure Active Directory. You will also need to know how to use PowerShell and CLI to monitor and automate your Azure resources.
 
